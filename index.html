@@ -1,0 +1,557 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ER COR LÉGION CORNUE | The Isle Evrima</title>
+
+<style>
+:root {
+  --rouge:#ed3838;
+  --orange:#ff7547;
+  --fond:#09080b;
+  --carte:#211519;
+  --bordure:#943531;
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  color:white;
+  background:var(--fond);
+}
+
+header {
+  background:#100c10;
+  border-bottom:2px solid var(--rouge);
+  padding:18px 3%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:15px;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.logo {
+  font-size:23px;
+  font-weight:900;
+  color:var(--rouge);
+}
+
+.logo small {
+  display:block;
+  color:white;
+  font-size:11px;
+  letter-spacing:3px;
+  margin-top:5px;
+}
+
+nav {
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+}
+
+button {
+  cursor:pointer;
+  font-family:inherit;
+}
+
+nav button {
+  color:white;
+  background:transparent;
+  border:0;
+  padding:11px;
+  border-radius:7px;
+  font-weight:bold;
+}
+
+nav button:hover,
+nav button.active {
+  background:#a52828;
+}
+
+.hero {
+  height:530px;
+  background-image:
+    linear-gradient(
+      to bottom,
+      transparent 45%,
+      #09080b 100%
+    ),
+    url("fond.png");
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  text-align:center;
+  padding:40px 20px;
+}
+
+.hero-content {
+  background:#10090bc4;
+  padding:20px 35px;
+  border-radius:15px;
+  border:1px solid #7d302b;
+  max-width:900px;
+}
+
+.hero h1 {
+  font-size:clamp(28px,4vw,54px);
+  margin:12px 0;
+}
+
+.hero h1 span {
+  color:var(--orange);
+}
+
+.hero h2 {
+  letter-spacing:4px;
+  font-size:17px;
+}
+
+.hero p {
+  color:#ddd;
+}
+
+.btn {
+  background:linear-gradient(120deg,#ad211e,#f04b28);
+  color:white;
+  border:1px solid #ff7955;
+  padding:12px 20px;
+  border-radius:8px;
+  font-weight:bold;
+  margin:5px;
+}
+
+.btn:hover {
+  filter:brightness(1.2);
+}
+
+main {
+  max-width:1450px;
+  margin:auto;
+  padding:25px;
+  min-height:500px;
+}
+
+h2.section-title {
+  border-left:4px solid var(--rouge);
+  padding-left:15px;
+  margin:30px 0 20px;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:
+    repeat(auto-fit,minmax(230px,1fr));
+  gap:18px;
+}
+
+.card {
+  background:linear-gradient(
+    145deg,#2b191d,#140f12
+  );
+  border:1px solid var(--bordure);
+  border-radius:13px;
+  padding:25px;
+  box-shadow:0 5px 20px #0005;
+}
+
+.card h3 {
+  color:var(--orange);
+  margin-top:0;
+}
+
+.card p {
+  line-height:1.6;
+  color:#ddd;
+}
+
+.stat {
+  text-align:center;
+}
+
+.stat .emoji {
+  font-size:35px;
+}
+
+.stat strong {
+  display:block;
+  margin:15px 0;
+  font-size:21px;
+}
+
+.status {
+  display:inline-block;
+  background:#54251f;
+  border:1px solid #a44536;
+  border-radius:20px;
+  padding:8px 12px;
+  font-size:12px;
+  color:#ffb19b;
+}
+
+.page {
+  display:none;
+}
+
+.page.active {
+  display:block;
+}
+
+footer {
+  text-align:center;
+  border-top:1px solid #6e2927;
+  padding:30px;
+  color:#bbb;
+}
+
+@media(max-width:700px) {
+  header {
+    justify-content:center;
+  }
+
+  nav {
+    justify-content:center;
+  }
+
+  nav button {
+    font-size:12px;
+    padding:8px;
+  }
+
+  .hero {
+    height:450px;
+  }
+
+  .hero-content {
+    padding:15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    ER COR LÉGION CORNUE
+    <small>THE ISLE EVRIMA</small>
+  </div>
+
+  <nav>
+    <button class="active" onclick="ouvrir('accueil',this)">Accueil</button>
+    <button onclick="ouvrir('reglement',this)">Règlement</button>
+    <button onclick="ouvrir('dinos',this)">Dinos</button>
+    <button onclick="ouvrir('parking',this)">Parking</button>
+    <button onclick="ouvrir('boutique',this)">Boutique</button>
+    <button onclick="ouvrir('banque',this)">Banque</button>
+    <button onclick="ouvrir('quetes',this)">Quêtes</button>
+    <button onclick="ouvrir('classement',this)">Classement</button>
+    <button onclick="ouvrir('admin',this)">Administration</button>
+    <button id="discord-login" onclick="connexionDiscord()" style="background:#5865f2">Se connecter avec Discord</button>
+    <button id="discord-logout" onclick="deconnexionDiscord()" style="display:none">Déconnexion</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>ER COR <span>LÉGION CORNUE</span></h1>
+    <h2>THE ISLE EVRIMA</h2>
+    <p>Survie • Immersion • Communauté</p>
+    <p>La survie appartient aux plus forts.</p>
+
+    <button class="btn" onclick="explorer()">
+      Explorer le serveur
+    </button>
+
+    <button class="btn" onclick="discord()">
+      Rejoindre Discord
+    </button>
+  </div>
+</section>
+
+<main id="contenu">
+
+<section id="accueil" class="page active">
+
+<h2 class="section-title">TABLEAU DE BORD</h2>
+
+<div class="grid">
+
+  <div class="card stat">
+    <div class="emoji">🌋</div>
+    <h3>Serveur</h3>
+    <strong>ER COR LÉGION CORNUE</strong>
+    <p>Hébergeur : PingPerfect</p>
+    <span class="status">Statut à connecter</span>
+  </div>
+
+  <div class="card stat">
+    <div class="emoji">👥</div>
+    <h3>Survivants</h3>
+    <strong>— / —</strong>
+    <p>Joueurs connectés</p>
+  </div>
+
+  <div class="card stat">
+    <div class="emoji">🛒</div>
+    <h3>Boutique</h3>
+    <strong>Articles</strong>
+    <p>Récompenses et services</p>
+    <button class="btn" onclick="ouvrir('boutique')">
+      Découvrir
+    </button>
+  </div>
+
+  <div class="card stat">
+    <div class="emoji">🦖</div>
+    <h3>Parking</h3>
+    <strong>À venir</strong>
+    <p>Sauvegarde de dinosaures</p>
+    <button class="btn" onclick="ouvrir('parking')">
+      Voir
+    </button>
+  </div>
+
+</div>
+
+<h2 class="section-title">
+BIENVENUE SUR ER COR LÉGION CORNUE
+</h2>
+
+<div class="grid">
+
+  <div class="card">
+    <h3>🔥 Notre communauté</h3>
+    <p>
+      Explore un monde sauvage,
+      affronte les prédateurs et
+      rejoins notre communauté
+      The Isle Evrima.
+    </p>
+    <button class="btn" onclick="ouvrir('reglement')">
+      Voir le règlement
+    </button>
+  </div>
+
+  <div class="card">
+    <h3>📢 Actualités</h3>
+    <p>Portail ER COR en préparation.</p>
+    <p>Boutique en développement.</p>
+    <p>Événements communautaires à venir.</p>
+  </div>
+
+  <div class="card">
+    <h3>🎯 Tes objectifs</h3>
+    <p>
+      Survis, progresse et participe
+      aux événements du serveur.
+    </p>
+    <button class="btn" onclick="ouvrir('quetes')">
+      Voir les quêtes
+    </button>
+  </div>
+
+</div>
+</section>
+
+<section id="reglement" class="page">
+<h2 class="section-title">RÈGLEMENT</h2>
+<div class="card">
+  <h3>📜 Règlement officiel</h3>
+  <p>
+    Les règles du serveur seront
+    publiées prochainement.
+  </p>
+</div>
+</section>
+
+<section id="dinos" class="page">
+<h2 class="section-title">FICHES DINOSAURES</h2>
+
+<div class="grid">
+  <div class="card">
+    <h3>🦖 Tyrannosaurus rex</h3>
+    <p>Grand prédateur terrestre.</p>
+  </div>
+
+  <div class="card">
+    <h3>🐊 Deinosuchus</h3>
+    <p>Prédateur aquatique.</p>
+  </div>
+
+  <div class="card">
+    <h3>🦖 Carnotaurus</h3>
+    <p>Prédateur rapide et dangereux.</p>
+  </div>
+</div>
+</section>
+
+<section id="parking" class="page">
+<h2 class="section-title">PARKING</h2>
+<div class="card">
+  <h3>🦖 Parking des dinosaures</h3>
+  <p>
+    Le système de sauvegarde des
+    dinosaures sera connecté au serveur
+    lorsqu'une intégration compatible
+    sera disponible.
+  </p>
+  <span class="status">En développement</span>
+</div>
+</section>
+
+<section id="boutique" class="page">
+<h2 class="section-title">BOUTIQUE</h2>
+
+<div class="grid">
+  <div class="card">
+    <h3>🥩 Carcasse</h3>
+    <p>Article en préparation.</p>
+    <p>Prix à définir.</p>
+    <button class="btn" onclick="demo()">
+      Acheter
+    </button>
+  </div>
+
+  <div class="card">
+    <h3>🎁 Récompenses</h3>
+    <p>Récompenses à venir.</p>
+    <button class="btn" onclick="demo()">
+      Acheter
+    </button>
+  </div>
+</div>
+</section>
+
+<section id="banque" class="page">
+<h2 class="section-title">BANQUE</h2>
+<div class="card">
+  <h3>💰 Monnaie virtuelle</h3>
+  <p>
+    Le système de monnaie virtuelle
+    sera ajouté prochainement.
+  </p>
+</div>
+</section>
+
+<section id="quetes" class="page">
+<h2 class="section-title">QUÊTES</h2>
+<div class="card">
+  <h3>🎯 Missions quotidiennes</h3>
+  <p>
+    Les missions et les récompenses
+    seront disponibles prochainement.
+  </p>
+</div>
+</section>
+
+<section id="classement" class="page">
+<h2 class="section-title">CLASSEMENT</h2>
+<div class="card">
+  <h3>🏆 Classement des survivants</h3>
+  <p>
+    Les statistiques seront affichées
+    après connexion au serveur.
+  </p>
+</div>
+</section>
+
+<section id="admin" class="page">
+<h2 class="section-title">ADMINISTRATION</h2>
+<div class="card">
+  <h3>⚙️ Administration ER COR</h3>
+  <p>
+    L'espace administrateur sécurisé
+    sera ajouté lors de la connexion
+    aux services du serveur.
+  </p>
+  <span class="status">
+    Non disponible dans cette maquette
+  </span>
+</div>
+</section>
+
+</main>
+
+<footer>
+  ER COR LÉGION CORNUE © 2026
+  — THE ISLE EVRIMA
+</footer>
+
+<script>
+async function verifierConnexion() {
+  try {
+    const r = await fetch('/auth/me', {credentials:'same-origin'});
+    const d = await r.json();
+    const b = document.getElementById('discord-login');
+    const out = document.getElementById('discord-logout');
+    if (d.authenticated) {
+      b.textContent = '👤 ' + d.user.username;
+      b.onclick = null;
+      out.style.display = 'inline-block';
+    } else {
+      b.textContent = 'Se connecter avec Discord';
+      b.onclick = connexionDiscord;
+      out.style.display = 'none';
+    }
+  } catch (e) { console.warn('Connexion indisponible',e); }
+}
+function connexionDiscord() { location.href='/auth/login'; }
+async function deconnexionDiscord() { await fetch('/auth/logout',{method:'POST'}); location.href='/'; }
+verifierConnexion();
+function ouvrir(id, bouton) {
+  document.querySelectorAll(".page").forEach(
+    p => p.classList.remove("active")
+  );
+
+  const page = document.getElementById(id);
+  if (!page) return;
+
+  page.classList.add("active");
+
+  document.querySelectorAll("nav button").forEach(
+    b => b.classList.remove("active")
+  );
+
+  const selection = bouton ||
+    document.querySelector(
+      'nav button[onclick*="' + id + '"]'
+    );
+
+  if (selection) {
+    selection.classList.add("active");
+  }
+
+  document.getElementById("contenu").scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+function explorer() {
+  ouvrir("accueil");
+}
+
+function discord() {
+  window.open("https://discord.gg/yUxQuAN3NE", "_blank");
+}
+
+function demo() {
+  alert(
+    "Boutique en préparation. Aucun achat effectué."
+  );
+}
+</script>
+
+</body>
+</html>
