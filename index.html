@@ -622,6 +622,25 @@ function ouvrirGestionBoutique() {
   }
 }
 
+function ajouterArticle() {
+  const nom = document.getElementById("article-nom").value.trim();
+  const prix = Number(document.getElementById("article-prix").value);
+  const liste = document.getElementById("liste-articles");
+
+  if (!nom || !Number.isFinite(prix) || prix <= 0) {
+    alert("Entre un nom et un prix valide.");
+    return;
+  }
+
+  if (liste.textContent.includes("Aucun article")) {
+    liste.textContent = "";
+  }
+
+  const article = document.createElement("p");
+  article.textContent = nom + " — " + prix + " coins";
+  liste.appendChild(article);
+}
+
 </script>
 
 </body>
