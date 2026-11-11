@@ -414,24 +414,62 @@ BIENVENUE SUR ER COR LÉGION CORNUE
 <section id="boutique" class="page">
 <h2 class="section-title">BOUTIQUE</h2>
 
-<div class="grid">
-  <div class="card">
-    <h3>🥩 Carcasse</h3>
-    <p>Article en préparation.</p>
-    <p>Prix à définir.</p>
-    <button class="btn" onclick="demo()">
-      Acheter
-    </button>
-  </div>
 
-  <div class="card">
-    <h3>🎁 Récompenses</h3>
-    <p>Récompenses à venir.</p>
-    <button class="btn" onclick="demo()">
-      Acheter
-    </button>
-  </div>
+<div class="grid" id="articles-boutique">
+  <p>Chargement des carcasses...</p>
 </div>
+
+<script>
+async function chargerBoutique() {
+  const zone = document.getElementById("articles-boutique");
+
+  try {
+    const reponse = await fetch("/api/articles");
+    if (!reponse.ok) throw new Error("Erreur API " + reponse.status);
+
+    const donnees = await reponse.json();
+    const articles = Array.isArray(donnees)
+      ? donnees
+      : donnees.articles;
+
+    if (!Array.isArray(articles)) {
+      throw new Error("Format des articles incorrect");
+    }
+
+    zone.replaceChildren();
+
+    for (const article of articles) {
+      const carte = document.createElement("div");
+      carte.className = "card";
+
+      const titre = document.createElement("h3");
+      titre.textContent = "🥩 " + article.nom;
+
+      const prix = document.createElement("p");
+      prix.textContent = article.prix + " points";
+
+      const bouton = document.createElement("button");
+      bouton.className = "btn";
+      bouton.textContent = "Acheter";
+      bouton.disabled = true;
+      bouton.title = "Achat bientôt disponible";
+
+      carte.append(titre, prix, bouton);
+      zone.appendChild(carte);
+    }
+
+    if (articles.length === 0) {
+      zone.textContent = "Aucune carcasse disponible.";
+    }
+  } catch (erreur) {
+    zone.textContent = "Impossible de charger les carcasses.";
+    console.error(erreur);
+  }
+}
+
+chargerBoutique();
+</script>
+
 </section>
 
 <section id="banque" class="page">
