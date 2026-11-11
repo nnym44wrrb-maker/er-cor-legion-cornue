@@ -480,7 +480,7 @@ BIENVENUE SUR ER COR LÉGION CORNUE
       <button class="btn" type="button" onclick="ouvrirGestionJoueurs()">
         Gestion des joueurs
       </button>
-      <button class="btn" type="button">
+      <button class="btn" type="button" onclick="ouvrirGestionBoutique()">
         Gestion de la boutique
       </button>
       <button class="btn" type="button">
@@ -491,7 +491,27 @@ BIENVENUE SUR ER COR LÉGION CORNUE
   <p>Administration des joueurs du serveur The Isle.</p>
   <p>Liste des joueurs : connexion au serveur à configurer.</p>
 </div>
-    </div>
+   
+<div id="gestion-boutique" class="card" hidden>
+  <h3>🛒 Gestion de la boutique ER COR</h3>
+  <p>Ajouter et gérer les articles de la boutique.</p>
+
+  <input id="article-nom" type="text"
+         placeholder="Nom de l'article">
+
+  <input id="article-prix" type="number"
+         min="0" placeholder="Prix en coins">
+
+  <button class="btn" type="button">
+    Ajouter un article
+  </button>
+
+  <h3>Articles de la boutique</h3>
+  <div id="liste-articles">
+    Aucun article pour le moment.
+  </div>
+</div>
+ </div>
   </div>
 </section>
 
@@ -595,6 +615,13 @@ function demo() {
     panneau.hidden = !panneau.hidden;
   }
 }
+function ouvrirGestionBoutique() {
+  const panneau = document.getElementById("gestion-boutique");
+  if (panneau) {
+    panneau.hidden = !panneau.hidden;
+  }
+}
+
 </script>
 
 </body>
