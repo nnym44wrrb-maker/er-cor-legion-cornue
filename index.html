@@ -680,6 +680,136 @@ function ajouterArticle() {
 }
 
 </script>
+  
+<style>
+  #er-roue-bloc {
+    max-width: 420px;
+    margin: 35px auto;
+    padding: 24px;
+    text-align: center;
+    color: white;
+    background: #211519;
+    border: 2px solid #ed3838;
+    border-radius: 18px;
+  }
+  #er-roue {
+    width: 280px;
+    height: 280px;
+    max-width: 100%;
+    aspect-ratio: 1;
+    margin: 20px auto;
+    border: 7px solid #ff7547;
+    border-radius: 50%;
+    background: conic-gradient(
+      #ed3838 0deg 60deg,
+      #ff7547 60deg 120deg,
+      #943531 120deg 180deg,
+      #ed3838 180deg 240deg,
+      #ff7547 240deg 300deg,
+      #943531 300deg 360deg
+    );
+    display: grid;
+    place-items: center;
+    transition: transform 4s cubic-bezier(.15,.7,.15,1);
+  }
+  #er-roue span {
+    background: #211519;
+    border: 3px solid white;
+    border-radius: 50%;
+    padding: 20px;
+    font-size: 22px;
+    font-weight: bold;
+  }
+  #er-roue-bouton {
+    padding: 14px 25px;
+    background: #ed3838;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: bold;
+  }
+  #er-roue-bouton:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+  }
+</style>
+
+<section id="er-roue-bloc">
+  <h2>🎡 ROUE QUOTIDIENNE ER COR</h2>
+  <p>Une chance de gagner jusqu'à 500 ER Coins !</p>
+  <div id="er-roue"><span>ER COR</span></div>
+  <p id="er-roue-solde">Chargement du solde...</p>
+  <button id="er-roue-bouton" disabled>
+    🎡 TOURNE LA ROUE
+  </button>
+  <p id="er-roue-message"></p>
+</section>
+
+<script>
+let erRotation = 0;
+
+const erBouton = document.getElementById("er-roue-bouton");
+const erMessage = document.getElementById("er-roue-message");
+const erSolde = document.getElementById("er-roue-solde");
+
+async function erChargerRoue() {
+  try {
+    const reponse = await fetch("/api/wheel");
+    const data = await reponse.json();
+
+    if (!reponse.ok) {
+      erMessage.textContent = data.error || "Connexion requise.";
+      return;
+    }
+
+    erSolde.textContent = "💰 Solde : " + data.balance + " ER Coins";
+    erBouton.disabled = !data.canSpin;
+
+    erMessage.textContent = data.canSpin
+      ? "Ta roue est disponible !"
+      : "Prochain tour : " + new Date(data.nextSpin).toLocaleString("fr-FR");
+  } catch {
+    erMessage.textContent = "Impossible de charger la roue.";
+  }
+}
+
+erBouton.addEventListener("click", async () => {
+  erBouton.disabled = true;
+  erMessage.textContent = "La roue tourne...";
+
+  try {
+    const reponse = await fetch("/api/wheel", {
+      method: "POST"
+    });
+    const data = await reponse.json();
+
+    if (!reponse.ok) {
+      erMessage.textContent = data.error || "Erreur.";
+      await erChargerRoue();
+      return;
+    }
+
+    erRotation += 1800 + Math.floor(Math.random() * 360);
+    document.getElementById("er-roue").style.transform =
+      "rotate(" + erRotation + "deg)";
+
+    setTimeout(() => {
+      erMessage.textContent =
+        "🎉 Tu as gagné " + data.gain + " ER Coins !";
+      erSolde.textContent =
+        "💰 Solde : " + data.balance + " ER Coins";
+    }, 4000);
+  } catch {
+    erMessage.textContent = "Une erreur est survenue.";
+    await erChargerRoue();
+  }
+});
+
+erChargerRoue();
+</script>
+
 
 </body>
 </html>
