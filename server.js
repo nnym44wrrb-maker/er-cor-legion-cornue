@@ -4,6 +4,12 @@ const app = express();
 
 app.use(express.json());
 
+const config = {
+  host: process.env.RCON_HOST,
+  port: Number(process.env.RCON_PORT || 14021),
+  password: process.env.RCON_PASSWORD
+};
+
 app.get("/", (req, res) => {
   res.json({
     serveur: "ER COR LÉGION CORNUE",
@@ -17,7 +23,10 @@ app.get("/api/status", (req, res) => {
     serveur: "ER COR LÉGION CORNUE",
     jeu: "The Isle Evrima",
     statut: "verification_en_attente",
-    players: null
+    players: null,
+    rcon_configure: Boolean(
+      config.host && config.port && config.password
+    )
   });
 });
 
